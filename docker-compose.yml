@@ -1,0 +1,41 @@
+services:
+  app:
+    container_name: effective_mobile
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: effective_mobile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - effective_mobile
+    volumes:
+      - ./src:/testTaskEffectiveMobile/src  
+      - ./package.json:/testTaskEffectiveMobile/package.json
+      - ./package-lock.json:/testTaskEffectiveMobile/package-lock.json
+      - ./.env.dev:/testTaskEffectiveMobile/.env
+
+  postgres:
+    image: postgres:14.12
+    restart: always
+    container_name: postgres-effective
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: effectiveMobile
+    ports:
+      - '5435:5432'
+    networks:
+      - effective_mobile 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scheme.sql:/docker-entrypoint-initdb.d/scheme.sql
+
+networks:
+  effective_mobile:
+    driver: bridge
+
+volumes:
+  postgres_data:
