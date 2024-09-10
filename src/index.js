@@ -1,8 +1,10 @@
 import express from "express";
 import { ConfigService } from "./config/config.service.js";
 import { ProductController } from "./product/product.controller.js";
+import { routesList } from "./utils/routesList.util.js";
 
 const app = express();
+app.use(express.json());
 const config = new ConfigService();
 const port = config.get("PORT");
 const mainPath = config.get("MAIN_PATH");
@@ -22,6 +24,7 @@ app.get("/", (req, res) => {
 async function start() {
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
+    routesList(app, `http://localhost:${port}${mainPath}`);
   });
 }
 
