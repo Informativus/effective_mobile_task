@@ -1,5 +1,5 @@
 import { Storage } from "../storage/storage.js";
-import { GET_PRODUCTS } from "../storage/queries.js";
+import { GET_PRODUCTS } from "../config/sqlQuerys.constats.js";
 
 export class ProductService {
   constructor() {

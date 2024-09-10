@@ -23,6 +23,7 @@ export class Storage {
 
   async sendQuery(query, values) {
     try {
+      return { rows: "Gell" };
       console.log(this.interpolateQuery(query, values));
       const response = await this.pool.query(query, values);
       return response.rows;

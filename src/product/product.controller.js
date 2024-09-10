@@ -19,7 +19,7 @@ export class ProductController {
     return this.router;
   }
 
-  async getProducts(res) {
+  async getProducts(req, res) {
     try {
       const products = await this.productService.getProducts();
       res.status(200).json(products);
