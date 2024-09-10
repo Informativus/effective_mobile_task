@@ -1,5 +1,8 @@
 import { Router } from "express";
 import { ProductService } from "./product.service.js";
+import { checkShopId } from "./middlewares/checkShopId.middleware.js";
+import { checkPlu } from "./middlewares/checkPlu.middleware.js";
+import { checkProductData } from "./middlewares/checkProductData.middleware.js";
 
 export class ProductController {
   constructor() {
@@ -9,10 +12,15 @@ export class ProductController {
     this.router.get("/products", this.getProducts.bind(this));
     this.router.get(
       "/products_shop/:shopId",
+      checkShopId,
       this.getProductsWithShop.bind(this),
     );
-    this.router.get("/product/:plu", this.getProduct.bind(this));
-    this.router.post("/create_product", this.createProduct.bind(this));
+    this.router.get("/product/:plu", checkPlu, this.getProduct.bind(this));
+    this.router.post(
+      "/create_product",
+      checkProductData,
+      this.createProduct.bind(this),
+    );
   }
 
   getRouter() {
@@ -33,11 +41,6 @@ export class ProductController {
     try {
       const { shopId } = req.params;
 
-      if (!shopId) {
-        res.status(400).json({ error: "Shop ID is required" });
-        return;
-      }
-
       const products = await this.productService.getProductsWithShop(shopId);
       res.status(200).json(products);
     } catch (error) {
@@ -50,11 +53,6 @@ export class ProductController {
     try {
       const { plu } = req.params;
 
-      if (!plu) {
-        res.status(400).json({ error: "PLU is required" });
-        return;
-      }
-
       const product = await this.productService.getProduct(plu);
       res.status(200).json(product);
     } catch (error) {
@@ -65,16 +63,10 @@ export class ProductController {
 
   async createProduct(req, res) {
     try {
-      const { name, price, shopId } = req.body;
+      const { productData } = req.body;
 
-      if (!name || !price || !shopId) {
-        res.status(400).json({ error: "All fields are required" });
-        return;
-      }
-
-      const productData = { name, price, shopId };
-      const product = await this.productService.createProduct(productData);
-      res.status(201).json(product);
+      await this.productService.createProduct(productData);
+      res.status(201).end();
     } catch (error) {
       console.log(`Error creating product: ${error}`);
       res.status(500).json({ error: "Error creating product" });
