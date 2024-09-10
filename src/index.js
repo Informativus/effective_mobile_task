@@ -1,7 +1,14 @@
 import express from "express";
+import { ConfigService } from "./config/config.service.js";
+import { ProductController } from "./product/product.controller.js";
 
 const app = express();
-const port = process.env.PORT || 8080;
+const config = new ConfigService();
+const port = config.get("PORT");
+const mainPath = config.get("MAIN_PATH");
+
+const productRouter = new ProductController().getRouter();
+app.use(mainPath, productRouter);
 
 app.get("/", (req, res) => {
   res
