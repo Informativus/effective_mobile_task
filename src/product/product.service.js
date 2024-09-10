@@ -1,30 +1,23 @@
-import { Storage } from "../storage/storage.js";
-import { GET_PRODUCTS } from "../config/sqlQuerys.constats.js";
+import { ProductStorage } from "./productStorage/productStorage.js";
 
 export class ProductService {
   constructor() {
-    this.storage = Storage.getInstance();
+    this.productStorage = new ProductStorage();
   }
 
   async getProducts() {
-    try {
-      const products = await this.storage.sendQuery(GET_PRODUCTS);
-      return products;
-    } catch (error) {
-      console.log(`Error getting products: ${error}`);
-      throw new InternalServerError("Error getting products");
-    }
+    return await this.productStorage.getProducts();
   }
 
   async getProductsWithShop(shopId) {
-    throw new Error("Method not implemented.");
+    return await this.productStorage.getProductsWithShop(shopId);
   }
 
   async getProduct(plu) {
-    throw new Error("Method not implemented.");
+    return await this.productStorage.getProduct(plu);
   }
 
   async createProduct(productData) {
-    throw new Error("Method not implemented.");
+    await this.productStorage.createProduct(productData);
   }
 }
