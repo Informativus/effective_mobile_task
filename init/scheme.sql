@@ -6,7 +6,7 @@ CREATE TABLE Products (
 
 CREATE TABLE Stores (
   id serial PRIMARY KEY NOT NULL,
-  name VARCHAR(128) NOT NULL
+  name VARCHAR(128) NOT NULL UNIQUE
 );
 
 CREATE TABLE Stocks (
