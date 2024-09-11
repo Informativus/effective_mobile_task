@@ -14,7 +14,7 @@ export class ProductService {
       return [];
     }
 
-    return productsPlus[0];
+    return productsPlus;
   }
 
   async getProductsPluWithShop(shopId) {
@@ -29,21 +29,17 @@ export class ProductService {
   }
 
   async getProductInfo(plu) {
-    if (!(await this._pluExists(plu))) {
+    const productInfo = await this.productStorage.getProductInfo(plu);
+
+    if (productInfo.length === 0) {
       throw new BadRequestError("Product does not exist");
     }
 
-    const productInfo = await this.productStorage.getProductInfo(plu);
     return productInfo[0];
   }
 
   async createProduct(productData) {
     productData.plu = generatePlu();
     await this.productStorage.createProduct(productData);
-  }
-
-  async _pluExists(plu) {
-    const pluExists = await this.productStorage.pluExists(plu);
-    return pluExists[0].exists;
   }
 }
