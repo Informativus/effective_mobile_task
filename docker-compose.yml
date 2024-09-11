@@ -31,7 +31,7 @@ services:
       - effective_mobile 
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./scheme.sql:/docker-entrypoint-initdb.d/scheme.sql
+      - ./init/scheme.sql:/docker-entrypoint-initdb.d/scheme.sql
 
 networks:
   effective_mobile:

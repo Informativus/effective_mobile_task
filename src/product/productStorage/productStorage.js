@@ -1,58 +1,73 @@
 import {
+  CHECK_PLU_ON_EXIST,
   CREATE_PRODUCT,
   GET_PRODUCT,
-  GET_PRODUCTS,
-  GET_PRODUCT_WITH_SHOP_ID,
+  GET_PRODUCTS_PLUS_WTIH_NAME,
+  GET_PRODUCT_PLU_WITH_SHOP_ID,
 } from "../../config/sqlQuerys.constats.js";
 import { Storage } from "../../storage/storage.js";
+import { InternalServerError } from "../../errors/InternalServier.error.js";
 
 export class ProductStorage {
   constructor() {
     this.storage = Storage.getInstance();
   }
 
-  async getProducts() {
+  async getProductsPlusWithName() {
     try {
-      const products = await this.storage.sendQuery(GET_PRODUCTS);
-      return products;
+      const productsPlus = await this.storage.sendQuery(
+        GET_PRODUCTS_PLUS_WTIH_NAME,
+      );
+      return productsPlus;
     } catch (error) {
-      console.log(`Error getting products: ${error}`);
-      throw new Error("Error getting products");
+      console.log(`Error getting products: `, error);
+      throw new InternalServerError("Error getting products");
     }
   }
 
-  async getProductsWithShop(shopId) {
+  async getProductsPluByShopId(shopId) {
     try {
-      const products = await this.storage.sendQuery(GET_PRODUCT_WITH_SHOP_ID, [
-        shopId,
-      ]);
+      const products = await this.storage.sendQuery(
+        GET_PRODUCT_PLU_WITH_SHOP_ID,
+        [shopId],
+      );
       return products;
     } catch (error) {
-      console.log(`Error getting products: ${error}`);
-      throw new Error("Error getting products with shop id");
+      console.log(`Error getting products: `, error);
+      throw new InternalServerError("Error getting products with shop id");
     }
   }
 
-  async getProduct(plu) {
+  async getProductInfo(plu) {
     try {
       const product = await this.storage.sendQuery(GET_PRODUCT, [plu]);
       return product;
     } catch (error) {
-      console.log(`Error getting products: ${error}`);
-      throw new Error("Error getting product");
+      console.log(`Error getting products: `, error);
+      throw new InternalServerError("Error getting product info");
     }
   }
 
   async createProduct(productData) {
     try {
-      await this.storage.sendQuery(
-        CREATE_PRODUCT,
+      await this.storage.sendQuery(CREATE_PRODUCT, [
+        productData.plu,
         productData.name,
         productData.price,
-      );
+      ]);
     } catch (error) {
-      console.log(`Error creating product: ${error}`);
-      throw new Error("Error creating product");
+      console.log(`Error creating product: `, error);
+      throw new InternalServerError("Error creating product");
+    }
+  }
+
+  async pluExists(plu) {
+    try {
+      const product = await this.storage.sendQuery(CHECK_PLU_ON_EXIST, [plu]);
+      return product;
+    } catch (error) {
+      console.log(`Error getting products: `, error);
+      throw new InternalServerError("Error getting product");
     }
   }
 }
