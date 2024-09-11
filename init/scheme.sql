@@ -1,0 +1,5 @@
+CREATE TABLE Products (
+  plu UUID PRIMARY KEY NOT NULL,
+  name VARCHAR(128) NOT NULL,
+  price DECIMAL(7, 2) NOT NULL
+)
