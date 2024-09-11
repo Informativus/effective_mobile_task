@@ -5,6 +5,7 @@ import { routesList } from "./utils/routesList.util.js";
 
 const app = express();
 app.use(express.json());
+
 const config = new ConfigService();
 const port = config.get("PORT");
 const mainPath = config.get("MAIN_PATH");

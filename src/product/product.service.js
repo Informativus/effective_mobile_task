@@ -1,4 +1,5 @@
 import { ProductStorage } from "./productStorage/productStorage.js";
+import { generatePlu } from "../utils/generatePlu.util.js";
 
 export class ProductService {
   constructor() {
@@ -9,8 +10,8 @@ export class ProductService {
     return await this.productStorage.getProducts();
   }
 
-  async getProductsWithShop(shopId) {
-    return await this.productStorage.getProductsWithShop(shopId);
+  async getProductsPluWithShop(shopId) {
+    return await this.productStorage.getProductsPluWithShop(shopId);
   }
 
   async getProduct(plu) {
@@ -18,6 +19,7 @@ export class ProductService {
   }
 
   async createProduct(productData) {
+    productData.plu = generatePlu();
     await this.productStorage.createProduct(productData);
   }
 }

@@ -13,7 +13,7 @@ export class ProductController {
     this.router.get(
       "/products_shop/:shopId",
       checkShopId,
-      this.getProductsWithShop.bind(this),
+      this.getProductsPluWithShop.bind(this),
     );
     this.router.get("/product/:plu", checkPlu, this.getProduct.bind(this));
     this.router.post(
@@ -37,11 +37,11 @@ export class ProductController {
     }
   }
 
-  async getProductsWithShop(req, res) {
+  async getProductsPluWithShop(req, res) {
     try {
       const { shopId } = req.params;
 
-      const products = await this.productService.getProductsWithShop(shopId);
+      const products = await this.productService.getProductsPluWithShop(shopId);
       res.status(200).json(products);
     } catch (error) {
       console.log(`Error getting products with shop id: ${error}`);
