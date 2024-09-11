@@ -1,6 +1,7 @@
 import express from "express";
 import { ConfigService } from "./config/config.service.js";
 import { ProductController } from "./product/product.controller.js";
+import { StoreController } from "./store/store.controller.js";
 import { routesList } from "./utils/routesList.util.js";
 
 const app = express();
@@ -11,7 +12,10 @@ const port = config.get("PORT");
 const mainPath = config.get("MAIN_PATH");
 
 const productRouter = new ProductController().getRouter();
+const storeRouter = new StoreController().getRouter();
+
 app.use(mainPath, productRouter);
+app.use(mainPath, storeRouter);
 
 app.get("/", (req, res) => {
   res
