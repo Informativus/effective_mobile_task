@@ -1,5 +1,4 @@
 import {
-  CHECK_PLU_ON_EXIST,
   CREATE_PRODUCT,
   GET_PRODUCT,
   GET_PRODUCTS_PLUS_WTIH_NAME,
@@ -58,16 +57,6 @@ export class ProductStorage {
     } catch (error) {
       console.log(`Error creating product: `, error);
       throw new InternalServerError("Error creating product");
-    }
-  }
-
-  async pluExists(plu) {
-    try {
-      const product = await this.storage.sendQuery(CHECK_PLU_ON_EXIST, [plu]);
-      return product;
-    } catch (error) {
-      console.log(`Error getting products: `, error);
-      throw new InternalServerError("Error getting product");
     }
   }
 }
