@@ -18,12 +18,15 @@ export class Storage {
       port: this.config.get("PSQL_PORT"),
     });
 
+    this.pool.on("connect", () => {
+      console.log("Connected to the database");
+    });
+
     Storage.instance = this;
   }
 
   async sendQuery(query, values) {
     try {
-      return { rows: "Gell" };
       console.log(this.interpolateQuery(query, values));
       const response = await this.pool.query(query, values);
       return response.rows;
