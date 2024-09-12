@@ -27,7 +27,7 @@ export class OrderController {
       const orders = await this.orderService.getOrders();
 
       if (orders.length === 0) {
-        res.status(204).end();
+        return res.status(204).end();
       }
 
       res.status(200).json(orders);
