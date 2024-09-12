@@ -1,6 +1,7 @@
 // PRODUCT
 export const GET_PRODUCTS_PLUS_WTIH_NAME = "SELECT plu, name FROM Products";
 export const GET_PRODUCT = "SELECT * FROM Products WHERE plu = $1";
+export const GET_PRODUCT_BY_NAME = "SELECT * FROM Products WHERE name = $1";
 export const GET_PRODUCT_PLU_WITH_SHOP_ID =
   "SELECT plu FROM Product_Store WHERE store_id = $1";
 export const CREATE_PRODUCT =
