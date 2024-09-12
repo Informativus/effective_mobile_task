@@ -24,3 +24,12 @@ export const GET_LEFTOVERS_BY_PLU =
   "SELECT st.name AS store_name, l.store_id, l.quantity_on_shelf FROM Leftovers l JOIN Stores st ON st.id = l.store_id WHERE plu = $1";
 export const GET_LEFTOVERS_BY_PLU_AND_LEFTOVERS_AMOUNT =
   "SELECT st.name AS store_name, l.quantity_on_shelf FROM Leftovers l JOIN Stores st ON st.id = l.store_id WHERE plu = $1 AND l.quantity_on_shelf >= $2";
+export const REDUCE_LEFTOVERS_BY_PLU_AND_STORE =
+  "UPDATE Leftovers SET quantity_on_shelf = quantity_on_shelf - $1 WHERE plu = $2 AND store_id = $3";
+export const INCREASE_LEFTOVERS_BY_PLU_AND_STORE =
+  "UPDATE Leftovers SET quantity_on_shelf = quantity_on_shelf + $1 WHERE plu = $2 AND store_id = $3";
+
+// ORDER
+export const CREATE_ORDER =
+  "INSERT INTO Orders (plu, store_id, quantity_in_order) VALUES ($1, $2, $3)";
+export const GET_ALL_ORDERS = "SELECT * FROM Orders";

@@ -1,7 +1,7 @@
 import { isNoValidMask } from "../../utils/validatePluMask.util.js";
-import { LeftoversService } from "../../leftovers/leftovers.service.js";
 
-export async function checkLeftoversData(req, res, next) {
+// TODO: Нарушил SRP принцип
+export function checkLeftoversDataOnType(req, res, next) {
   const { leftoversData } = req.body;
 
   if (!leftoversData) {
@@ -32,22 +32,6 @@ export async function checkLeftoversData(req, res, next) {
     return res.status(400).json({
       message: "Amount must be a number",
     });
-  }
-
-  const leftoversService = new LeftoversService();
-  const leftovers = await leftoversService.getLeftoversByPlu(leftoversData.plu);
-
-  if (leftovers.length === 0) {
-    next();
-    return;
-  }
-
-  for (const leftover of leftovers) {
-    if (leftover.store_id === leftoversData.storeId) {
-      return res.status(400).json({
-        message: "Leftover for this store already exists",
-      });
-    }
   }
 
   next();

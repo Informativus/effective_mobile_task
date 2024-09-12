@@ -1,8 +1,10 @@
 import {
   CREAT_LEFTOVERS,
   GET_LEFTOVERS_BY_PLU,
-  GET_LEFTOVERS_BY_STORE_ID,
   GET_LEFTOVERS_BY_PLU_AND_LEFTOVERS_AMOUNT,
+  GET_LEFTOVERS_BY_STORE_ID,
+  INCREASE_LEFTOVERS_BY_PLU_AND_STORE,
+  REDUCE_LEFTOVERS_BY_PLU_AND_STORE,
 } from "../../config/sqlQuerys.constats.js";
 import { InternalServerError } from "../../errors/InternalServier.error.js";
 import { Storage } from "../../storage/storage.js";
@@ -49,6 +51,32 @@ export class LeftoverStorage {
       throw new InternalServerError(
         "Error getting leftovers by plu and amount",
       );
+    }
+  }
+
+  async reduceLeftoversByPluAndStore(leftoversData) {
+    try {
+      await this.storage.sendQuery(REDUCE_LEFTOVERS_BY_PLU_AND_STORE, [
+        leftoversData.amount,
+        leftoversData.plu,
+        leftoversData.storeId,
+      ]);
+    } catch (error) {
+      console.error(`Error reducing leftovers: `, error);
+      throw new InternalServerError("Error reducing leftovers");
+    }
+  }
+
+  async increaseLeftoversByPluAndStore(leftoversData) {
+    try {
+      await this.storage.sendQuery(INCREASE_LEFTOVERS_BY_PLU_AND_STORE, [
+        leftoversData.amount,
+        leftoversData.plu,
+        leftoversData.storeId,
+      ]);
+    } catch (error) {
+      console.error(`Error increasing leftovers: `, error);
+      throw new InternalServerError("Error increasing leftovers");
     }
   }
 

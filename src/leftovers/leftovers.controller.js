@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { checkLeftoversData } from "../middlewares/leftovers/checkLeftoversData.middleware.js";
+import { checkAmount } from "../middlewares/leftovers/checkAmount.middleware.js";
+import { checkAmountOnValid } from "../middlewares/leftovers/checkAmountOnValid.middleware.js";
+import { checkLeftoversDataOnType } from "../middlewares/leftovers/checkLeftoversDataTypes.middleware.js";
+import { checkLeftoversDataOnUnique } from "../middlewares/leftovers/checkLeftoversDataOnUnique.middleware.js";
 import { checkPlu } from "../middlewares/product/checkPlu.middleware.js";
 import { checkStoreId } from "../middlewares/store/checkStoreId.middleware.js";
-import { checkAmount } from "../middlewares/leftovers/checkAmount.middleware.js";
 import { ErrorHandler } from "../utils/errorHandler.util.js";
 import { LeftoversService } from "./leftovers.service.js";
 
@@ -27,9 +29,21 @@ export class LeftoversController {
       checkAmount,
       this.getLeftoversByPluAndLeftoversAmount.bind(this),
     );
+    this.router.patch(
+      "/reduce_leftovers",
+      checkLeftoversDataOnType,
+      checkAmountOnValid,
+      this.reduceLeftoversByPluAndStore.bind(this),
+    );
+    this.router.patch(
+      "/increase_leftovers",
+      checkLeftoversDataOnType,
+      this.increaseLeftoversByPluAndStore.bind(this),
+    );
     this.router.post(
       "/create_leftover",
-      checkLeftoversData,
+      checkLeftoversDataOnType,
+      checkLeftoversDataOnUnique,
       this.createLeftover.bind(this),
     );
   }
@@ -101,6 +115,30 @@ export class LeftoversController {
         "Error getting leftovers by plu and amount",
         res,
       );
+    }
+  }
+
+  async reduceLeftoversByPluAndStore(req, res) {
+    try {
+      const { leftoversData } = req.body;
+
+      await this.leftoversService.reduceLeftoversByPluAndStore(leftoversData);
+      res.status(200).json({ message: "Leftover reduced" });
+    } catch (error) {
+      console.error(`Error reducing leftovers: `, error);
+      new ErrorHandler().handle(error, "Error reducing leftovers", res);
+    }
+  }
+
+  async increaseLeftoversByPluAndStore(req, res) {
+    try {
+      const { leftoversData } = req.body;
+
+      await this.leftoversService.increaseLeftoversByPluAndStore(leftoversData);
+      res.status(200).json({ message: "Leftover increased" });
+    } catch (error) {
+      console.error(`Error increasing leftovers: `, error);
+      new ErrorHandler().handle(error, "Error increasing leftovers", res);
     }
   }
 

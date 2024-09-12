@@ -39,6 +39,14 @@ export class LeftoversService {
     return leftovers;
   }
 
+  async reduceLeftoversByPluAndStore(leftoversData) {
+    await this.leftoverStorage.reduceLeftoversByPluAndStore(leftoversData);
+  }
+
+  async increaseLeftoversByPluAndStore(leftoversData) {
+    await this.leftoverStorage.increaseLeftoversByPluAndStore(leftoversData);
+  }
+
   async createLeftover(leftoversData) {
     await this.leftoverStorage.createLeftover(leftoversData);
   }
