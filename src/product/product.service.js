@@ -1,7 +1,6 @@
 import { ProductStorageService } from "./productStorage/productStorage.service.js";
 import { generatePlu } from "../utils/generatePlu.util.js";
 import { BadRequestError } from "../errors/BadRequest.error.js";
-import { InternalServerError } from "../errors/InternalServier.error.js";
 
 export class ProductService {
   constructor() {
@@ -16,6 +15,16 @@ export class ProductService {
     }
 
     return productsPlus;
+  }
+
+  async getProductInfoByName(name) {
+    const productInfo = await this.productStorage.getProductInfoByName(name);
+
+    if (productInfo.length === 0) {
+      throw new BadRequestError("Product does not exist");
+    }
+
+    return productInfo[0];
   }
 
   async getProductsPluWithShop(shopId) {

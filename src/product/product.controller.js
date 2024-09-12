@@ -12,6 +12,10 @@ export class ProductController {
 
     this.router.get("/products", this.getProductsPlusWithName.bind(this));
     this.router.get(
+      "/product_name/:name",
+      this.getProductInfoByName.bind(this),
+    );
+    this.router.get(
       "/products_store/:id",
       checkStoreId,
       this.getProductsPluWithShop.bind(this),
@@ -40,6 +44,21 @@ export class ProductController {
       res.status(200).json(products);
     } catch (error) {
       new ErrorHandler().handle(error, "Error getting products", res);
+    }
+  }
+
+  async getProductInfoByName(req, res) {
+    try {
+      const { name } = req.params;
+
+      const product = await this.productService.getProductInfoByName(name);
+      res.status(200).json(product);
+    } catch (error) {
+      new ErrorHandler().handle(
+        error,
+        "Error getting product info by name",
+        res,
+      );
     }
   }
 

@@ -2,10 +2,11 @@ import {
   CREATE_PRODUCT,
   GET_PRODUCT,
   GET_PRODUCTS_PLUS_WTIH_NAME,
+  GET_PRODUCT_BY_NAME,
   GET_PRODUCT_PLU_WITH_SHOP_ID,
 } from "../../config/sqlQuerys.constats.js";
-import { Storage } from "../../storage/storage.js";
 import { InternalServerError } from "../../errors/InternalServier.error.js";
+import { Storage } from "../../storage/storage.js";
 
 export class ProductStorageService {
   constructor() {
@@ -21,6 +22,16 @@ export class ProductStorageService {
     } catch (error) {
       console.log(`Error getting products: `, error);
       throw new InternalServerError("Error getting products");
+    }
+  }
+
+  async getProductInfoByName(name) {
+    try {
+      const product = await this.storage.sendQuery(GET_PRODUCT_BY_NAME, [name]);
+      return product;
+    } catch (error) {
+      console.log(`Error getting products: `, error);
+      throw new InternalServerError("Error getting product info");
     }
   }
 
