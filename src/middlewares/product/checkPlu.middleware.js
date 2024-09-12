@@ -1,3 +1,5 @@
+import { isNoValidMask } from "../../utils/validatePluMask.util.js";
+
 export function checkPlu(req, res, next) {
   const { plu } = req.params;
 
@@ -15,17 +17,4 @@ export function checkPlu(req, res, next) {
   }
 
   next();
-}
-
-function isNoValidMask(plu) {
-  const maskChar = "#";
-  const separatorChar = /[^-]/g;
-  const mask = "########-####-####-####-############";
-  const maskPlu = plu.replace(separatorChar, maskChar);
-
-  if (maskPlu === mask) {
-    return false;
-  }
-
-  return true;
 }

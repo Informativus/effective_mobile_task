@@ -7,7 +7,7 @@ import {
 import { Storage } from "../../storage/storage.js";
 import { InternalServerError } from "../../errors/InternalServier.error.js";
 
-export class ProductStorage {
+export class ProductStorageService {
   constructor() {
     this.storage = Storage.getInstance();
   }
