@@ -22,6 +22,10 @@ export class Storage {
       console.log("Connected to the database");
     });
 
+    this.pool.on("remove", () => {
+      console.log("Connection removed from pool");
+    });
+
     Storage.instance = this;
   }
 

@@ -31,7 +31,9 @@ export class StoreService {
       throw new BadRequestError("Store already exist");
     }
 
-    await this.storeStorage.createStore(storeData);
+    const shopId = await this.storeStorage.createStore(storeData);
+
+    return shopId[0];
   }
 
   async _isExistStore(name) {

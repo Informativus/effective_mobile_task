@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { ProductService } from "./product.service.js";
 import { ErrorHandler } from "../utils/errorHandler.util.js";
-import { checkShopId } from "./middlewares/checkShopId.middleware.js";
-import { checkPlu } from "./middlewares/checkPlu.middleware.js";
-import { checkProductData } from "./middlewares/checkProductData.middleware.js";
+import { checkStoreId } from "../middlewares/store/checkStoreId.middleware.js";
+import { checkPlu } from "../middlewares/product/checkPlu.middleware.js";
+import { checkProductData } from "../middlewares/product/checkProductData.middleware.js";
 
 export class ProductController {
   constructor() {
@@ -12,8 +12,8 @@ export class ProductController {
 
     this.router.get("/products", this.getProductsPlusWithName.bind(this));
     this.router.get(
-      "/products_shop/:shopId",
-      checkShopId,
+      "/products_store/:id",
+      checkStoreId,
       this.getProductsPluWithShop.bind(this),
     );
     this.router.get("/product/:plu", checkPlu, this.getProductInfo.bind(this));
@@ -45,9 +45,9 @@ export class ProductController {
 
   async getProductsPluWithShop(req, res) {
     try {
-      const { shopId } = req.params;
+      const { id } = req.params;
 
-      const products = await this.productService.getProductsPluWithShop(shopId);
+      const products = await this.productService.getProductsPluWithShop(id);
 
       if (products.length === 0) {
         res.status(204).end();
@@ -79,8 +79,8 @@ export class ProductController {
     try {
       const { productData } = req.body;
 
-      await this.productService.createProduct(productData);
-      res.status(201).end();
+      const productPlu = await this.productService.createProduct(productData);
+      res.status(201).json(productPlu);
     } catch (error) {
       new ErrorHandler().handle(error, "Error creating product", res);
     }

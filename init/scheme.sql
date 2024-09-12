@@ -9,7 +9,7 @@ CREATE TABLE Stores (
   name VARCHAR(128) NOT NULL UNIQUE
 );
 
-CREATE TABLE Stocks (
+CREATE TABLE Leftovers (
   id serial PRIMARY KEY NOT NULL,
   plu UUID NOT NULL,
   store_id INT NOT NULL,
@@ -28,4 +28,4 @@ CREATE TABLE Orders (
 );
 
 CREATE VIEW Product_Store AS
-  SELECT plu, store_id FROM Stocks;
+  SELECT plu, store_id FROM Leftovers;

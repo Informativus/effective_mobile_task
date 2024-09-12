@@ -1,10 +1,11 @@
-import { ProductStorage } from "./productStorage/productStorage.js";
+import { ProductStorageService } from "./productStorage/productStorage.service.js";
 import { generatePlu } from "../utils/generatePlu.util.js";
 import { BadRequestError } from "../errors/BadRequest.error.js";
+import { InternalServerError } from "../errors/InternalServier.error.js";
 
 export class ProductService {
   constructor() {
-    this.productStorage = new ProductStorage();
+    this.productStorage = new ProductStorageService();
   }
 
   async getProductsPlusWithName() {
@@ -40,6 +41,8 @@ export class ProductService {
 
   async createProduct(productData) {
     productData.plu = generatePlu();
-    await this.productStorage.createProduct(productData);
+    const productPlu = await this.productStorage.createProduct(productData);
+
+    return productPlu[0];
   }
 }

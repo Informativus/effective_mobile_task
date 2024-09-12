@@ -34,7 +34,15 @@ export class StoreStorage {
 
   async createStore(storeData) {
     try {
-      await this.storage.sendQuery(CREATE_STORE, [storeData.name]);
+      const shopId = await this.storage.sendQuery(CREATE_STORE, [
+        storeData.name,
+      ]);
+
+      if (shopId.length === 0) {
+        throw new InternalServerError("Error creating store");
+      }
+
+      return shopId;
     } catch (error) {
       console.error(error);
       throw new InternalServerError("Error creating store");
