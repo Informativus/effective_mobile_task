@@ -49,11 +49,17 @@ export class ProductStorage {
 
   async createProduct(productData) {
     try {
-      await this.storage.sendQuery(CREATE_PRODUCT, [
+      const productPlu = await this.storage.sendQuery(CREATE_PRODUCT, [
         productData.plu,
         productData.name,
         productData.price,
       ]);
+
+      if (productPlu.length === 0) {
+        throw new InternalServerError("Error creating product");
+      }
+
+      return productPlu;
     } catch (error) {
       console.log(`Error creating product: `, error);
       throw new InternalServerError("Error creating product");
