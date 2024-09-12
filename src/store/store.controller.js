@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { StoreService } from "./store.service.js";
 import { ErrorHandler } from "../utils/errorHandler.util.js";
-import { checkStoreId } from "./middlewares/checkStoreId.middleware.js";
+import { checkStoreId } from "../middlewares/store/checkStoreId.middleware.js";
+import { checkStoreData } from "../middlewares/store/checkStoreData.middleware.js";
 
 export class StoreController {
   constructor() {
@@ -10,11 +11,15 @@ export class StoreController {
 
     this.router.get("/stores", this.getStoresIdsWithName.bind(this));
     this.router.get(
-      "/stores_info/:id",
+      "/store_info/:id",
       checkStoreId,
       this.getStoreInfoById.bind(this),
     );
-    this.router.post("/create_store", this.createStore.bind(this));
+    this.router.post(
+      "/create_store",
+      checkStoreData,
+      this.createStore.bind(this),
+    );
   }
 
   getRouter() {
@@ -32,7 +37,7 @@ export class StoreController {
 
       res.status(200).json(stores);
     } catch (error) {
-      new ErrorHandler().handle(error, "Error getting stores", res);
+      new ErrorHandler().handle(error, "Error getting store", res);
     }
   }
 
@@ -50,8 +55,8 @@ export class StoreController {
   async createStore(req, res) {
     try {
       const { storeData } = req.body;
-      await this.storeService.createStore(storeData);
-      res.status(201).end();
+      const shopId = await this.storeService.createStore(storeData);
+      res.status(201).json(shopId);
     } catch (error) {
       new ErrorHandler().handle(error, "Error creating store", res);
     }
