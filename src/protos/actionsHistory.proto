@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package actionsHistory;
+
+service AddHistoryService {
+  rpc AddAction(ActionRequest) returns (EmptyResponse);
+}
+
+message ActionRequest {
+  int32 store_id = 1;
+  string plu = 2;
+  string action = 3;
+}
+
+message EmptyResponse {}
